@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>사건파일 #1103 : 흑백관의 목 없는 인형</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06070a;--panel:#0f1219;--panel2:#161a24;--line:#272d3b;--red:#b30f28;--red2:#ff2a45;--gold:#d9a93a;--text:#e8e6e1;--dim:#878c99}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100%;overflow-x:hidden}
+body.tilt .wrap{transform:rotate(-.6deg) skewX(-.6deg);filter:hue-rotate(-15deg) saturate(1.4)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+#vig{position:fixed;inset:0;pointer-events:none;z-index:49;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.9) 100%);transition:background 1s}
+#vig.red{background:radial-gradient(ellipse at center,transparent 25%,rgba(120,0,15,.75) 100%)}
+#rain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
+#flash{position:fixed;inset:0;background:#dfe8ff;opacity:0;pointer-events:none;z-index:60}
+.serif{font-family:'Nanum Myeongjo',serif}
+.wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:14px 16px 90px;transition:transform .3s,filter .3s}
+.doll-svg{display:block;width:100%;height:auto}
+.doll-svg .pupil{transition:transform .08s linear}
+.doll-svg .face{fill:#e9e3d6}
+.doll-svg .crack{stroke:#5a4f44;stroke-width:.8;fill:none}
+
+#title{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,#190a0f 0%,#06070a 70%)}
+#title .file{letter-spacing:.5em;color:var(--red2);font-size:12px;margin-bottom:16px;animation:blink 2.4s infinite}
+#title h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:clamp(30px,8vw,54px);line-height:1.15;text-shadow:0 0 30px rgba(200,16,46,.45)}
+#title h1 span{display:block;font-size:.42em;color:var(--dim);font-weight:400;margin-top:10px;letter-spacing:.2em}
+#title .dollbox{width:110px;margin:22px 0 8px;animation:twitch 7s infinite}
+#title .tag{color:var(--dim);font-size:14px;line-height:1.8;margin-bottom:22px}
+#title input{background:transparent;border:none;border-bottom:2px solid var(--red);color:var(--text);font-size:18px;text-align:center;padding:8px;width:220px;outline:none;font-family:inherit;margin-bottom:20px}
+#title small{color:#555b68;font-size:11px;margin-top:18px}
+.btn{display:inline-block;background:var(--red);color:#fff;border:none;padding:14px 26px;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;letter-spacing:.06em;border-radius:2px;transition:.2s}
+.btn:hover{background:var(--red2)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--dim)}
+.btn.ghost:hover{border-color:var(--red);color:var(--text)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+
+#black{position:fixed;inset:0;z-index:75;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+#black .lines p{font-family:'Nanum Myeongjo',serif;font-size:clamp(17px,4.6vw,22px);line-height:1.9;min-height:1.9em;color:#ddd}
+#black .lines p.red{color:var(--red2);font-weight:800}
+#black .lines p.small{font-size:14px;color:#777;font-family:'Noto Sans KR'}
+#black .go{margin-top:30px;opacity:0;transition:opacity 1s;pointer-events:none}
+#black .go.on{opacity:1;pointer-events:auto}
+.caret::after{content:"▌";animation:blink .7s infinite;color:var(--red2)}
+
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:10px;gap:8px}
+header .case{font-size:11px;letter-spacing:.3em;color:var(--red2)}
+header .who{font-size:13px;color:var(--dim);margin-top:2px}
+header .who b{color:var(--gold)}
+#hud{text-align:right}
+#hud .lbl{font-size:10px;letter-spacing:.2em;color:var(--dim)}
+#hud .dist{font-family:'Nanum Myeongjo',serif;font-size:24px;font-weight:800;line-height:1.1}
+#hud.near .dist{color:var(--red2);animation:pulse .9s infinite}
+#hud .bar{width:120px;height:3px;background:var(--line);margin-top:4px;margin-left:auto}
+#hud .bar i{display:block;height:100%;background:var(--red);transition:width .8s;margin-left:auto}
+#snd{background:none;border:1px solid var(--line);color:var(--dim);padding:2px 8px;font-size:11px;cursor:pointer;border-radius:2px;margin-left:6px}
+
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:16px;position:sticky;top:0;z-index:10;background:var(--bg);padding:6px 0}
+nav button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:9px 4px;font-size:12px;font-family:inherit;cursor:pointer;font-weight:700;line-height:1.3}
+nav button .n{display:block;font-size:10px;color:#555b68;letter-spacing:.15em}
+nav button.on{border-color:var(--red);color:var(--text);background:#1a0d12}
+nav button.lock{opacity:.35;cursor:not-allowed}
+nav button.done .n{color:var(--gold)}
+.tab{display:none;animation:fade .5s}
+.tab.on{display:block}
+
+.card{background:var(--panel);border:1px solid var(--line);padding:20px;margin-bottom:14px;position:relative}
+.card.paper{background:linear-gradient(#ece4d2,#ddd2ba);color:#2a2219;font-family:'Nanum Myeongjo',serif;border:none;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.stamp{position:absolute;top:14px;right:14px;border:3px solid var(--red);color:var(--red);font-family:'Noto Sans KR';font-weight:900;padding:4px 10px;transform:rotate(8deg);font-size:13px;opacity:.85}
+h2{font-family:'Nanum Myeongjo',serif;font-size:22px;margin-bottom:10px;padding-right:70px}
+h3{font-size:15px;margin-bottom:8px;color:var(--gold)}
+p{line-height:1.85;font-size:15px}
+p+p{margin-top:10px}
+.blood{color:var(--red2);font-weight:900}
+.hand{font-family:'Nanum Pen Script',cursive;font-size:1.35em;color:#7a1020;line-height:1.3}
+.scratch{text-decoration:line-through;opacity:.6}
+.hint{font-size:12px;color:var(--dim);margin-top:8px}
+.center{text-align:center}.mt{margin-top:14px}
+.q-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.q-head .left{font-size:13px;color:var(--dim)}
+.q-head .left b{color:var(--red2);font-size:18px}
+.progress{height:3px;background:var(--line);margin:4px 0 14px}
+.progress i{display:block;height:100%;background:var(--red);transition:width .6s;width:0}
+
+.suspects{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.sus{background:var(--panel2);border:1px solid var(--line);padding:10px 6px;text-align:center}
+.sus .face{font-size:30px;filter:grayscale(1) brightness(.75)}
+.sus .nm{font-size:13px;font-weight:700;margin-top:4px}
+.sus .rl{font-size:11px;color:var(--dim);line-height:1.5}
+
+.qlist{display:grid;gap:8px}
+.qitem{background:var(--panel2);border:1px solid var(--line);padding:12px 14px;cursor:pointer;transition:.2s;font-size:14px;line-height:1.6}
+.qitem:hover:not(.used):not(.off){border-color:var(--red)}
+.qitem .to{font-size:11px;color:var(--red2);font-weight:700;letter-spacing:.1em;display:block;margin-bottom:2px}
+.qitem.used{cursor:default;border-color:#3b2a2e;background:#130d10}
+.qitem.off{opacity:.25;cursor:not-allowed}
+.qitem .ans{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed #3b2a2e;color:#cfc8bd;font-family:'Nanum Myeongjo',serif;font-size:15px;line-height:1.8}
+.qitem.used .ans{display:block}
+#found{display:none;border-color:var(--red);background:#140709}
+
+.evs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.ev{background:var(--panel2);border:1px solid var(--line);padding:13px;cursor:pointer;text-align:left;font-family:inherit;color:var(--text);transition:.2s}
+.ev:hover{border-color:var(--red)}
+.ev .ic{font-size:22px}
+.ev .t{font-weight:700;font-size:14px;margin-top:4px}
+.ev .s{font-size:11px;color:var(--dim);margin-top:2px}
+.ev.read .s{color:var(--gold)}
+.ev.open{border-color:var(--red);background:#1a0d12}
+.ev.special{border-color:#5a1420}
+#evWrap{position:relative;overflow:hidden;touch-action:pan-y}
+#evView{min-height:220px;margin:0}
+#evView ul{padding-left:18px;line-height:1.9}
+#evView table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+#evView td,#evView th{border-bottom:1px solid rgba(0,0,0,.2);padding:7px 4px;text-align:left;vertical-align:top}
+.blueprint{background:#0e2552;color:#cfe0ff;font-family:monospace;border:1px solid #2b4c9a;padding:14px;font-size:12.5px;line-height:1.5;white-space:pre;overflow-x:auto}
+#torch{position:absolute;inset:0;pointer-events:none;z-index:3;--x:50%;--y:30%;--r:140px;background:radial-gradient(circle var(--r) at var(--x) var(--y),rgba(0,0,0,0) 0,rgba(0,0,0,.15) 55%,rgba(2,2,4,.985) 100%);transition:opacity 1.2s}
+#torch.off{opacity:0}
+.torch-tip{font-size:12px;color:var(--gold);margin-bottom:8px;line-height:1.6}
+.ghostline{color:#8a0018;opacity:.55;font-family:'Nanum Pen Script',cursive;font-size:22px;transform:rotate(-3deg);display:inline-block}
+.photo{width:150px;margin:6px auto 10px;background:#cfc6b2;padding:8px 8px 22px;box-shadow:0 4px 12px rgba(0,0,0,.4);transform:rotate(-2deg)}
+.photo .img{height:150px;background:linear-gradient(#5b6670,#2f363c);position:relative;overflow:hidden;filter:sepia(.6) contrast(1.1)}
+.photo .img .doll-svg{position:absolute;left:32px;top:24px;width:80px}
+.photo .tear{position:absolute;left:-6px;top:0;bottom:0;width:14px;background:#cfc6b2;clip-path:polygon(0 0,60% 5%,20% 12%,80% 20%,30% 30%,70% 40%,10% 52%,60% 62%,20% 72%,80% 82%,30% 92%,60% 100%,0 100%)}
+
+.dq{margin-bottom:18px}
+.dq .qq{font-weight:700;margin-bottom:8px;font-size:15px}
+.dq .qq b{color:var(--red2)}
+.opts{display:grid;gap:6px}
+.opt{background:var(--panel2);border:1px solid var(--line);padding:11px 14px;cursor:pointer;font-size:14px;color:var(--text);text-align:left;font-family:inherit;line-height:1.5}
+.opt:hover{border-color:#555}
+.opt.sel{border-color:var(--red);background:#2a0c14}
+#verdict{margin-top:14px;display:none}
+#verdict.bad{display:block;border:1px solid var(--red);background:#1f070c;padding:16px;text-align:center}
+.shake{animation:shake .4s}
+body.quake .wrap{animation:shake .5s}
+
+.reveal p{opacity:0;transform:translateY(8px);transition:opacity .9s,transform .9s}
+.reveal p.show{opacity:1;transform:none}
+.speaker{font-size:12px;color:var(--gold);letter-spacing:.2em;display:block;margin-bottom:2px;font-family:'Noto Sans KR'}
+.culprit{color:var(--red2)}
+.big{font-family:'Nanum Myeongjo',serif;font-size:clamp(22px,6vw,34px);font-weight:800;text-align:center;margin:18px 0;text-shadow:0 0 20px rgba(255,42,69,.6)}
+
+#peek{position:fixed;right:6vw;bottom:0;width:90px;z-index:45;transform:translateY(110%);transition:transform .5s cubic-bezier(.2,.9,.3,1);transform-origin:bottom center}
+#peek.up{transform:translateY(38%) scale(var(--s,1))}
+#peek.left{right:auto;left:5vw}
+
+#scare{position:fixed;inset:0;z-index:90;background:#000;display:none;align-items:center;justify-content:center;flex-direction:column}
+#scare .dollbox{width:min(70vw,360px);animation:zoom .3s ease-out}
+#scare .txt{font-family:'Nanum Myeongjo',serif;color:var(--red2);font-size:24px;margin-top:6px;letter-spacing:.4em;text-align:center}
+
+#cellar{position:fixed;inset:0;z-index:85;background:#000;display:none;overflow:hidden;touch-action:none;cursor:none}
+#cellar .item{position:absolute;font-family:'Nanum Myeongjo',serif;color:#cfc6b8;text-align:center;font-size:14px;line-height:1.6;transform:translate(-50%,-50%);width:190px}
+#cellar .item .ico{font-size:34px;display:block;filter:grayscale(1)}
+#cellar .wall{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);font-family:'Nanum Pen Script';color:#8a0014;font-size:clamp(26px,7vw,46px);white-space:nowrap}
+#cellarTorch{position:absolute;inset:0;pointer-events:none;--x:-500px;--y:-500px;background:radial-gradient(circle 120px at var(--x) var(--y),rgba(0,0,0,0) 0,rgba(0,0,0,.4) 60%,#000 100%)}
+#cellarHud{position:absolute;top:14px;left:0;right:0;text-align:center;color:var(--gold);font-size:13px;z-index:3;pointer-events:none}
+#cellarEnd{position:absolute;inset:0;background:rgba(0,0,0,.94);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:4;cursor:auto}
+
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:#1a0d12;border:1px solid var(--red);padding:12px 18px;font-size:14px;z-index:70;transition:.4s;max-width:90%;text-align:center}
+#toast.on{transform:translateX(-50%) translateY(0)}
+
+.glitch{animation:glitch .15s steps(2) 2}
+@keyframes glitch{0%{transform:translate(2px,-1px);text-shadow:-2px 0 red,2px 0 cyan}50%{transform:translate(-2px,1px);text-shadow:2px 0 red,-2px 0 cyan}100%{transform:none}}
+@keyframes blink{50%{opacity:.25}}
+@keyframes pulse{50%{opacity:.4}}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes twitch{0%,90%,100%{transform:rotate(0)}91%{transform:rotate(-18deg)}93%{transform:rotate(12deg)}95%{transform:rotate(0)}}
+@keyframes zoom{from{transform:scale(.25)}to{transform:scale(1)}}
+@keyframes flick{0%,100%{opacity:1}10%{opacity:.1}12%{opacity:1}30%{opacity:.2}33%{opacity:1}60%{opacity:.05}64%{opacity:1}}
+body.flick .wrap{animation:flick 1.2s}
+
+@media(max-width:520px){
+  .suspects{grid-template-columns:repeat(2,1fr)}
+  .evs{grid-template-columns:1fr}
+  nav button{font-size:11px}
+  #hud .bar{width:80px}
+  #peek{width:70px}
+}
+</style>
+</head>
+<body>
+<canvas id="rain"></canvas>
+<div id="vig"></div>
+<div id="flash"></div>
+<div id="toast"></div>
+<div id="peek"></div>
+<div id="scare"><div class="dollbox"></div><div class="txt" id="scareTxt"></div></div>
+<div id="black"><div class="lines"></div><div class="go"><button class="btn"></button></div></div>
+
+<div id="cellar">
+  <div id="cellarHud">🔦 손전등으로 지하 공방을 비추세요 · 발견 <b id="cfound">0</b> / 4</div>
+  <div class="wall" id="cwall"></div>
+  <div id="citems"></div>
+  <div id="cellarTorch"></div>
+  <div id="cellarEnd"></div>
+</div>
+
+<section id="title">
+  <div class="file">CLASSIFIED · CASE FILE #1103</div>
+  <h1>흑백관의<br>목 없는 인형<span>명탐정 사건파일</span></h1>
+  <div class="dollbox" id="titleDoll"></div>
+  <p class="tag">20년 전에 부쳐진 편지가, 오늘 당신에게 도착했다.<br>받는 사람 — <span class="blood">당신의 이름.</span></p>
+  <input id="nameIn" maxlength="8" placeholder="탐정 이름 입력">
+  <button class="btn" id="startBtn">편지를 뜯는다</button>
+  <small>소리 없이 플레이하도록 만들었습니다 · 어두운 곳에서 플레이 권장</small>
+</section>
+
+<div class="wrap" id="game" style="display:none">
+  <header>
+    <div>
+      <div class="case">CASE #1103-K</div>
+      <div class="who"><b id="pname">무명</b> 탐정 <button id="snd">🔇 소리 OFF</button></div>
+    </div>
+    <div id="hud">
+      <div class="lbl">월희와의 거리</div>
+      <div class="dist" id="dist">20m</div>
+      <div class="bar"><i id="distBar" style="width:100%"></i></div>
+    </div>
+  </header>
+
+  <nav>
+    <button data-t="0" class="on"><span class="n">STEP 1</span>탐문 조사</button>
+    <button data-t="1" class="lock"><span class="n">STEP 2</span>현장 증거</button>
+    <button data-t="2" class="lock"><span class="n">STEP 3</span>진상 추리</button>
+    <button data-t="3" class="lock"><span class="n">STEP 4</span>사건 종결</button>
+  </nav>
+
+  <section class="tab on" id="t0">
+    <div class="card paper">
+      <div class="stamp">미해결</div>
+      <h2>사건파일 #1103 : 흑백관의 목 없는 인형</h2>
+      <p>당신은 <b>2006년 8월 소인이 찍힌 편지</b> 한 통을 받고, 태풍 직전 마지막 배로 외딴섬의 저택 <b>'흑백관'</b>에 도착했다. 인형 작가 <b>서월화(62)</b>는 당신을 부른 적이 없다며 불쾌해했다.</p>
+      <p>그날 밤 <b>11시 40분.</b> 객실에서 잠들어 있던 당신은 찢어지는 여자의 비명에 눈을 떴다. 2층 아틀리에 문은 <b>안쪽에서 빗장</b>이 걸려 있었고, 창문엔 쇠창살이 박혀 있었다.</p>
+      <p>집사가 도끼로 문을 부쉈을 때 — 서월화는 수십 개의 인형들 사이에 <b>인형처럼 꼿꼿이 앉은 채</b> 죽어 있었다. 그녀가 가장 아끼던 인형 <b>'월희'</b>는 머리가 사라진 채, 몸만 시신 쪽을 향해 있었다.</p>
+      <p>벽에는 피로 쓴 글씨. <span class="blood">"아직 한 명 남았다."</span></p>
+      <p>다리는 끊겼고, 배는 아침까지 오지 않는다. <b>범인은 이 안에 있다.</b></p>
+    </div>
+    <div class="card">
+      <h3>🕯 용의자</h3>
+      <div class="suspects">
+        <div class="sus"><div class="face">🧓</div><div class="nm">한도진</div><div class="rl">집사 · 68세<br>30년 근속</div></div>
+        <div class="sus"><div class="face">👩</div><div class="nm">서유리</div><div class="rl">조카 · 27세<br>유일한 상속인</div></div>
+        <div class="sus"><div class="face">🧔</div><div class="nm">마준혁</div><div class="rl">편집자 · 41세<br>작품집 담당</div></div>
+        <div class="sus"><div class="face">👩‍⚕️</div><div class="nm">윤세라</div><div class="rl">주치의 · 31세<br>3개월 전 부임</div></div>
+      </div>
+    </div>
+    <div class="card" id="found">
+      <h3 style="color:var(--red2)">⚠ 당신의 객실 문 앞에 놓여 있던 것</h3>
+      <p class="serif">사라졌던 <b>월희의 머리</b>. 유리 눈알 하나가 빠져 있고, 꿰매진 입술 사이로 접힌 종이가 삐져나와 있다.</p>
+      <p class="hand" style="text-align:center;font-size:2em;margin:10px 0" id="foundNote"></p>
+      <p class="serif" style="font-size:13px;color:#9a8">머리카락이 축축하다. 바닷물 냄새가 아니다. <b>흙냄새다.</b></p>
+    </div>
+    <div class="card">
+      <div class="q-head"><h3 style="margin:0">STEP 1. 탐문 — 질문을 고르세요</h3><div class="left">남은 질문 <b id="qLeft">6</b> / 6</div></div>
+      <div class="progress"><i id="qBar"></i></div>
+      <p class="hint" style="margin:-6px 0 12px">12개 중 <b>6개</b>만 물을 수 있습니다. 무엇이 핵심인지는 알려주지 않습니다.</p>
+      <div class="qlist" id="qlist"></div>
+    </div>
+  </section>
+
+  <section class="tab" id="t1">
+    <div class="card">
+      <div class="q-head"><h3 style="margin:0">STEP 2. 현장 증거 대조</h3><div class="left">확인 <b id="evCnt">0</b> / 7</div></div>
+      <p class="hint" style="margin-bottom:12px">정전으로 저택이 어둡습니다. 모든 증거를 확인하면 비상 발전기가 돌아옵니다.</p>
+      <div class="evs" id="evs"></div>
+      <div class="torch-tip" id="torchTip">🔦 증거 위를 마우스나 손가락으로 문질러 비추세요. 구석까지 꼼꼼히.</div>
+      <div id="evWrap"><div class="card paper" id="evView"><p style="text-align:center;opacity:.6">↑ 증거를 선택하세요</p></div><div id="torch"></div></div>
+      <div class="center mt"><button class="btn" id="toDeduce" disabled>추리 시작하기 →</button></div>
+    </div>
+  </section>
+
+  <section class="tab" id="t2">
+    <div class="card">
+      <h3>STEP 3. 진상 조합</h3>
+      <p class="hint" style="margin-bottom:16px">틀릴 때마다 <b class="blood">월희가 다가옵니다.</b> 거리가 0m가 되면…</p>
+      <div id="dqs"></div>
+      <div class="center"><button class="btn" id="submit">🔍 최종 추리 제출</button></div>
+      <div id="verdict">
+        <p class="blood" style="font-size:18px" id="vHead">❌ 틀렸어.</p>
+        <p id="vMsg" style="color:var(--dim);font-size:14px"></p>
+        <div class="mt"><button class="btn ghost" id="backEv">증거 다시 보기</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="t3">
+    <div class="card reveal" id="reveal"></div>
+    <div class="center" id="nextBtnWrap" style="display:none"><button class="btn" id="toCoda">사건 종결 보고서에 서명한다</button></div>
+  </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let name="무명";
+
+/* ===== original doll SVG ===== */
+function dollSVG(opts={}){
+  const eyeL=opts.oneEye?`<circle cx="36" cy="52" r="7" fill="#000"/><circle cx="36" cy="52" r="2.5" fill="#4a0008"/>`:`<ellipse cx="36" cy="52" rx="8" ry="9" fill="#111"/><circle class="pupil" cx="36" cy="52" r="2.6" fill="#ff2a45"/>`;
+  return `<svg class="doll-svg" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+   <path d="M14 60 Q8 20 50 12 Q92 20 86 60 L90 120 Q70 100 66 70 L34 70 Q30 100 10 120 Z" fill="#141014"/>
+   <ellipse class="face" cx="50" cy="60" rx="30" ry="36"/>
+   <path d="M20 48 Q50 22 80 48 Q72 30 50 26 Q28 30 20 48Z" fill="#141014"/>
+   ${eyeL}
+   <ellipse cx="64" cy="52" rx="8" ry="9" fill="#111"/><circle class="pupil" cx="64" cy="52" r="2.6" fill="#ff2a45"/>
+   <path d="M29 42 L43 46 M71 42 L57 46" stroke="#333" stroke-width="1.6"/>
+   <path d="M38 80 Q50 84 62 80" stroke="#5a0010" stroke-width="2" fill="none"/>
+   <path d="M41 77 L42 84 M46 78 L46 85 M50 78 L50 86 M54 78 L54 85 M59 77 L58 84" stroke="#2a0006" stroke-width="1.2"/>
+   <path class="crack" d="M60 30 L57 40 L62 46 L58 56 M31 66 L36 72 L33 78"/>
+   <ellipse cx="34" cy="68" rx="5" ry="3" fill="#d6a3a3" opacity=".4"/><ellipse cx="66" cy="68" rx="5" ry="3" fill="#d6a3a3" opacity=".4"/>
+   <path d="M36 61 Q37 70 35 76" stroke="#7a0012" stroke-width="1.2" fill="none" opacity=".8"/>
+  </svg>`;
+}
+$("#titleDoll").innerHTML=dollSVG();
+$("#scare .dollbox").innerHTML=dollSVG({oneEye:true});
+$("#peek").innerHTML=dollSVG();
+addEventListener("pointermove",e=>{
+  document.querySelectorAll(".doll-svg").forEach(svg=>{
+    const r=svg.getBoundingClientRect(); if(!r.width) return;
+    const a=Math.atan2(e.clientY-(r.top+r.height*.4),e.clientX-(r.left+r.width/2));
+    svg.querySelectorAll(".pupil").forEach(p=>p.style.transform=`translate(${Math.cos(a)*3.5}px,${Math.sin(a)*3.5}px)`);
+  });
+});
+
+/* ===== optional audio (default OFF) ===== */
+let AC=null,master=null,soundOn=false;
+function ensureAudio(){ if(AC) return; try{AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=.5;master.connect(AC.destination);
+  const len=AC.sampleRate*2,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const s=AC.createBufferSource();s.buffer=buf;s.loop=true;const f=AC.createBiquadFilter();f.type="lowpass";f.frequency.value=1100;const g=AC.createGain();g.gain.value=.1;s.connect(f);f.connect(g);g.connect(master);s.start();}catch(e){} }
+function tone(fq,dur=.4,type="sine",vol=.3,delay=0){ if(!soundOn||!AC) return; const t=AC.currentTime+delay,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=fq;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05);}
+const sfx={sting(){[196,208,277].forEach(f=>tone(f,1.2,"sawtooth",.15))},beat(){[0,.22,.8,1.02].forEach((d,i)=>tone(i%2?45:60,.25,"sine",.7,d))},box(){[880,1046,988,784,880,659].forEach((f,i)=>tone(f*(1-i*.015),.9,"triangle",.2,i*.42))}};
+$("#snd").onclick=()=>{soundOn=!soundOn; if(soundOn) ensureAudio(); if(master) master.gain.value=soundOn?.5:0; $("#snd").textContent=soundOn?"🔊 소리 ON":"🔇 소리 OFF";};
+
+/* ===== FX ===== */
+function lightning(){const f=$("#flash");f.style.transition="none";f.style.opacity=.8;setTimeout(()=>{f.style.transition="opacity .12s";f.style.opacity=0},70);setTimeout(()=>{f.style.transition="none";f.style.opacity=.45},180);setTimeout(()=>{f.style.transition="opacity 1s";f.style.opacity=0},240);}
+function toast(t,ms=2800){const e=$("#toast");e.innerHTML=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),ms)}
+function flick(){document.body.classList.remove("flick");void document.body.offsetWidth;document.body.classList.add("flick")}
+function quake(){document.body.classList.remove("quake");void document.body.offsetWidth;document.body.classList.add("quake")}
+function scare(txt="",ms=700){const s=$("#scare");$("#scareTxt").textContent=txt;s.style.display="flex";sfx.sting();if(navigator.vibrate)navigator.vibrate([80,40,120]);return sleep(ms).then(()=>s.style.display="none")}
+(()=>{const c=$("#rain"),x=c.getContext("2d");let W,H,dr=[];const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight;dr=Array.from({length:Math.floor(W/6)},()=>({x:Math.random()*W,y:Math.random()*H,l:10+Math.random()*18,v:8+Math.random()*10}))};rs();addEventListener("resize",rs);
+(function loop(){x.clearRect(0,0,W,H);x.strokeStyle="rgba(170,190,230,.5)";x.beginPath();for(const d of dr){x.moveTo(d.x,d.y);x.lineTo(d.x-2,d.y+d.l);d.y+=d.v;d.x-=.6;if(d.y>H){d.y=-20;d.x=Math.random()*W}}x.stroke();requestAnimationFrame(loop)})();})();
+
+/* ===== typed cutscene ===== */
+async function cutscene(lines,btnText,onDone){
+  const B=$("#black"),L=B.querySelector(".lines"),G=B.querySelector(".go"),btn=G.querySelector("button");
+  L.innerHTML="";G.classList.remove("on");B.style.display="flex";
+  for(const ln of lines){
+    if(ln.pause){await sleep(ln.pause);continue}
+    const p=document.createElement("p"); if(ln.c) p.className=ln.c; p.classList.add("caret"); L.appendChild(p);
+    for(const ch of ln.t){p.textContent+=ch; await sleep(ln.speed||55)}
+    p.classList.remove("caret"); await sleep(ln.wait??650);
+  }
+  btn.textContent=btnText; G.classList.add("on");
+  return new Promise(r=>btn.onclick=()=>{B.style.display="none";onDone&&onDone();r()});
+}
+
+/* ===== tension meter ===== */
+let dist=20;
+function setDist(d,msg){
+  dist=Math.max(0,d); $("#dist").textContent=dist+"m"; $("#distBar").style.width=(dist/20*100)+"%";
+  $("#hud").classList.toggle("near",dist<=6); $("#vig").classList.toggle("red",dist<=6);
+  $("#peek").style.setProperty("--s",(.7+(20-dist)/20*1.6).toFixed(2));
+  if(msg) toast(msg); flick();
+}
+setInterval(()=>{
+  if($("#game").style.display==="none"||dist>16) return;
+  if(Math.random()<(20-dist)/22){const p=$("#peek");p.classList.toggle("left",Math.random()<.5);p.classList.add("up");setTimeout(()=>p.classList.remove("up"),dist<=6?1600:900);}
+},6000);
+$("#peek").addEventListener("pointerenter",()=>$("#peek").classList.remove("up"));
+setInterval(()=>{if($("#game").style.display!=="none"&&Math.random()<.35)lightning()},15000);
+
+/* ===== glitch whispers ===== */
+const WHISPERS=()=>["뒤를 봐","나 여기 있어",`${name} 탐정님`,"지하에 있어","찾아줘","보고 있어","아직 한 명"];
+setInterval(()=>{
+  if($("#game").style.display==="none") return;
+  const pool=[...document.querySelectorAll(".tab.on .qitem.used .ans, .tab.on #evView p")].filter(e=>!e.dataset.g&&!e.id);
+  if(!pool.length||Math.random()<.4) return;
+  const el=pool[Math.floor(Math.random()*pool.length)],orig=el.innerHTML; el.dataset.g=1;
+  const w=WHISPERS(); el.innerHTML=`<span class="blood">${w[Math.floor(Math.random()*w.length)]}</span>`; el.classList.add("glitch");
+  setTimeout(()=>{el.innerHTML=orig;el.classList.remove("glitch");delete el.dataset.g},170);
+},5200);
+
+/* ===== DATA ===== */
+const Q=[
+ {to:"집사 한도진",q:"비명이 들린 정확한 시각은?",a:"시계탑 종이 열한 시 사십 분을 알린 <b>바로 그 순간</b>이었습니다. 종소리와 비명이 겹쳐서… 마치 <b>시간을 맞춰 놓은 것처럼</b> 정확했지요."},
+ {to:"조카 서유리",q:"비명이 들렸을 때 어디에 있었나?",a:"1층 식당이요. 저, 마 편집자님, 윤 선생님 셋이서 카드를 치고 있었어요. 이상하게 윤 선생님이 <b>11시 반쯤 먼저 카드를 하자고</b> 하셨어요. 평소엔 일찍 주무시는 분인데…"},
+ {to:"편집자 마준혁",q:"고인이 최근 만들던 작품은?",a:"'말하는 인형'이요. 몸속에 <b>태엽식 녹음 장치</b>를 넣어서, <b>정해진 시각이 되면</b> 녹음된 목소리가 나와요. 시연 때 들은 비명은… 진짜 사람이 죽는 소리 같았습니다."},
+ {to:"주치의 윤세라",q:"사망 추정 시각은?",a:"제가 가장 먼저 확인했어요. <b>등이 아직 따뜻했어요.</b> 비명이 들린 11시 40분, <b>방금 돌아가신 게 확실합니다.</b>"},
+ {to:"집사 한도진",q:"문을 부쉈을 때 상황은?",a:"빗장이 분명 안쪽에 걸려 있었습니다. 도끼로 세 번 내려쳐 열었지요. 그런데… 제일 먼저 뛰어든 윤 선생님이 시신이 아니라 <b>문 안쪽 빗장 앞에 웅크리고</b> 뭔가를 주머니에 넣으셨습니다. 제가 잘못 봤을 수도 있습니다만."},
+ {to:"조카 서유리",q:"인형 '월희'에 얽힌 이야기는?",a:"고모가 20년 전에 만든 인형이에요. <b>그해 여름 이 저택에서 사라진 여자아이</b>를 본떠서요. 아이는 끝내 못 찾았어요. 섬사람들은 밤마다 월희가 운다고 했어요. 그리고 월희 머리카락은… <b>사람 머리카락이래요.</b>"},
+ {to:"편집자 마준혁",q:"고인과 다툰 적이 있나?",a:"…원고료 때문에 몇 번 언성을 높였죠. 하지만 그 사람이 죽으면 작품집 계약도 날아갑니다. 제가 죽일 이유가 없어요."},
+ {to:"조카 서유리",q:"유산 상속에 대해 아는가?",a:"제가 다 받는 건 맞아요. 근데 이 저택, 빚이 집값보다 많아요. 받아봤자 <b>인형 더미랑 빚</b>뿐이에요."},
+ {to:"집사 한도진",q:"20년 전 사라진 아이를 기억하나?",a:"…열두 살이었습니다. 이름이… <b>윤…</b> 아, 아닙니다. 기억나지 않습니다. 그 일은 묻지 말아 주십시오. <i style='color:#a55'>(집사의 손이 심하게 떨린다. 손톱 밑에 오래된 흙이 끼어 있다.)</i>"},
+ {to:"주치의 윤세라",q:"왜 이 외딴섬 주치의를 맡았나?",a:"아무도 지원하지 않는 자리라서요. 제가 <b>먼저 자원했어요.</b> …어릴 때 이 섬에 와 본 적이 있거든요. 그리운 곳이라서요."},
+ {to:"편집자 마준혁",q:"창문으로 침입이 가능한가?",a:"불가능해요. 고인이 직접 쇠창살을 박았어요. '인형이 <b>도망가지 못하게</b>'라고 하더군요. 농담인 줄 알았는데…"},
+ {to:"주치의 윤세라",q:"당신에게 온 편지를 보여준다",a:"2006년 소인…? 그럴 리가요. 그해 저는 열한 살이었어요. 이 글씨는… <b>그 편지, 다시는 보여주지 마세요.</b> <i style='color:#a55'>(그녀의 얼굴이 하얗게 질렸다)</i>"}
+];
+const EV=[
+ {ic:"✉",t:"당신이 받은 편지",s:"2006.08.14 소인 · 받는 사람: 당신",special:true,body:()=>`
+   <p style="font-size:13px;opacity:.7">우체국 소인 <b>2006년 8월 14일</b> · 흑백관 우체통. 봉투는 누렇게 바랬는데, 받는 사람 이름의 잉크만 <b>방금 쓴 것처럼</b> 번져 있다.</p>
+   <p class="hand" style="font-size:1.6em;line-height:1.6;margin-top:12px">${name} 탐정님께.<br>11월 6일에 흑백관에 와 주세요.<br>그날 한 사람이 죽어요.<br>그러면 사람들이 저를 찾으러 올 거예요.</p>
+   <p class="hand" style="font-size:1.6em">저는 깜깜한 데 있어요. 너무 추워요.</p>
+   <p style="margin-top:30px;text-align:right"><span class="ghostline">— 하라 (12살)</span></p>
+   <p style="margin-top:40px;text-align:center"><span class="ghostline" style="font-size:16px;opacity:.35">지하 공방 · 벽 안쪽</span></p>`,
+   onRead:()=>setTimeout(()=>{scare("하 라");setDist(dist-2,"🎎 월희가 다가온다… "+(dist-2)+"m")},2600)},
+ {ic:"📜",t:"흑백관 규칙",s:"아틀리에 문 안쪽에 붙은 종이",special:true,body:()=>`
+   <h3 style="color:#7a1020">흑백관(黑柏館) 규칙</h3>
+   <ul><li>자정 이전, 허락 없이 아틀리에에 들어가지 말 것.</li><li>인형에게 이름을 묻지 말 것.</li><li>밤에 인형이 울어도 <b>대답하지 말 것.</b></li><li class="scratch">월희의 머리를 돌리지 말 것.</li></ul>
+   <p class="hand" style="margin-top:10px">— 월희는 아직 그 아이를 기억한다.</p>
+   <p style="font-size:13px;opacity:.7">※ 마지막 줄은 다른 펜, 다른 필체.</p>
+   <p style="margin-top:50px;text-align:right"><span class="ghostline">${name} 탐정님 뒤에 있어요</span></p>`,
+   onRead:()=>setTimeout(()=>setDist(dist-2,"🎎 등 뒤에서 머리카락 스치는 소리… "+(dist-2)+"m"),3000)},
+ {ic:"📓",t:"고인의 작업 일지",s:"책상 서랍, 마지막 4장",body:()=>`
+   <p><b>11월 2일</b> — 월희에게 드디어 목소리를 넣었다. 태엽 타이머를 맞추면 <b>지정한 시각에 녹음된 소리</b>가 나온다. 시험 삼아 내 비명을 녹음했다.</p>
+   <p><b>11월 4일</b> — 누군가 아틀리에에 들어왔던 흔적. 월희의 태엽이 감겨 있었다.</p>
+   <p><b>11월 5일</b> — 새 주치의의 눈이 <span class="hand">그 아이의 눈과 똑같다.</span> 그럴 리 없다. 그 아이는 한 집사와 내가 <span class="scratch">지하 공방 벽 안에</span></p>
+   <p><b>11월 6일</b> — <span class="hand">어젯밤 월희가 내 이름을 불렀다.</span></p>
+   <p style="opacity:.6;font-size:13px">(이후 페이지는 손톱으로 긁어 찢겨 있다)</p>`},
+ {ic:"📐",t:"아틀리에 도면",s:"2층 동쪽 · 출입구 1곳",body:()=>`
+<div class="blueprint">┌──────────── 창문(쇠창살) ────────────┐
+│  [인형 진열장]           [작업대]    │
+│                                      │
+│        ✕ 시신 (의자에 앉은 채)       │
+│        ◎ 월희 (머리 없음)            │
+│  [벽난로 — 불 꺼짐]                  │
+└─────[ 문 ]───────────────────────────┘
+       ↑ 회전식 레버 빗장
+       ↑ 문 아래 틈: 약 1.5cm</div>
+   <p style="margin-top:10px;font-size:14px">※ 빗장은 레버를 <b>90도 돌리면</b> 걸린다. 아주 약한 힘으로도 돌아간다.<br>※ 문 아래 틈엔 손가락도 안 들어간다. 하지만 <b>가는 실이라면…</b></p>`},
+ {ic:"🔬",t:"감식 보고서",s:"본토 경찰 원격 지시로 작성",body:()=>`
+   <table><tr><th>항목</th><th>소견</th></tr>
+   <tr><td>사후경직</td><td>턱·목·팔까지 진행. <b>사망 후 최소 2시간</b> → 사망 <b>21:00~22:00</b></td></tr>
+   <tr><td>체온</td><td>팔다리는 차가움. <b>등만</b> 부자연스럽게 따뜻. 의자 등받이에 <b>핫팩 포장지</b></td></tr>
+   <tr><td>빗장</td><td>레버에 <b>가는 실이 감겼던 마찰 흔적</b>. 문 아래 틈에 실 쓸린 자국</td></tr>
+   <tr><td>월희</td><td>목 단면 안에 <b>태엽식 녹음기</b>. 타이머 <b>23:40</b>에 멈춤</td></tr>
+   <tr><td>사인</td><td>진정제 주사 후 경부 압박. 목에 <b>작은 손가락 자국</b>도 있으나 크기가 <b>어린아이</b> 수준 — 설명 불가</td></tr></table>`},
+ {ic:"🕰",t:"21~22시 알리바이표",s:"사망 추정 시각의 행적",body:()=>`
+   <table><tr><th>이름</th><th>21:00~22:00</th><th>증인</th></tr>
+   <tr><td>한도진</td><td>당구실에서 마준혁과 당구</td><td>마준혁</td></tr>
+   <tr><td>마준혁</td><td>당구실에서 한도진과 당구</td><td>한도진</td></tr>
+   <tr><td>서유리</td><td>본토 변호사와 위성전화 (21:05~22:10)</td><td>통화 기록</td></tr>
+   <tr><td>윤세라</td><td>"21:30 수면제를 드리러 아틀리에 방문. 5분 뒤 나왔다. 살아 계셨다."</td><td style="color:#7a1020"><b>없음</b></td></tr></table>
+   <p style="font-size:13px;margin-top:10px">※ 진정제·주사기를 다룰 수 있는 사람은 섬에 단 한 명.</p>`},
+ {ic:"🖼",t:"시신이 쥐고 있던 사진",s:"반으로 찢긴 낡은 사진",special:true,body:()=>`
+   <div class="photo"><div class="img">${dollSVG()}<div class="tear"></div></div></div>
+   <p>바닷가에서 찍은 <b>두 소녀</b>의 사진. 왼쪽 아이는 찢겨 나갔다. 남은 아이는 열두 살쯤, <b>월희와 똑같은 얼굴</b>.</p>
+   <p>뒷면의 번진 잉크: <span class="hand">"<span style="opacity:.3">■■</span>라 언니랑, 흑백관 앞에서 — 2006. 여름"</span></p>
+   <p>※ 찢긴 반쪽은 현장에 없다. 누군가 <b>가져갔다.</b></p>
+   <p id="photoEye" style="font-size:13px;color:#7a1020;opacity:0;transition:opacity 2s">…방금, 사진 속 아이의 눈동자가 당신을 따라 움직였다.</p>`,
+   onRead:()=>{setTimeout(()=>{const e=$("#photoEye");if(e)e.style.opacity=1},2500);setTimeout(()=>setDist(dist-2,"🎎 "+(dist-2)+"m"),3500)}}
+];
+const DQ=[
+ {q:"<b>Q1.</b> 서월화를 죽인 범인은?",o:["집사 한도진","조카 서유리","편집자 마준혁","주치의 윤세라","한윤수"],a:4,m:"사망 시각(21~22시)에 알리바이가 없고, 진정제를 다룰 수 있는 사람은?"},
+ {q:"<b>Q2.</b> 밤 11시 40분, 모두가 들은 비명의 정체는?",o:["정주연이 지른 호루라기 소리","월희 몸속 녹음기가 타이머로 재생한 비명","집사가 지른 연기","인형의 저주"],a:0,m:"감식 보고서와 작업 일지(11월 2일)를 다시 보세요."},
+ {q:"<b>Q3.</b> 밀실은 어떻게 만들어졌나?",o:["비밀 통로로 빠져나갔다","창문 쇠창살을 분해했다가 다시 끼웠다","문 아래 틈으로 실을 넣어 빗장을 돌리고, 문이 부서지자 가장 먼저 들어가 실을 회수했다","김민정이 그냥 문앞에서 손으로 막음"],a:3,m:"도면의 '1.5cm 틈', 빗장의 마찰 흔적, 문이 부서진 직후 누가 무엇을 했는지."},
+ {q:"<b>Q4.</b> 범인의 동기는?",o:["저택과 유산","원고료 원한","20년 전 사라진 언니 — 서월화가 언니를 죽이고 그 머리카락을 월희에 심었다","의료 과실 은폐"],a:2,m:"찢긴 사진 뒷면, 월희의 머리카락, '어릴 때 이 섬에 와 봤다'는 진술."}
+];
+
+/* ===== tabs ===== */
+let qLeft=6,asked=0,evRead=new Set(),unlocked=0,picks=[null,null,null,null],tries=0,blackoutDone=false;
+const navBtns=[...document.querySelectorAll("nav button")];
+function go(i){ if(i>unlocked){toast("🔒 이전 단계를 먼저 완료하세요.");return}
+  navBtns.forEach((b,j)=>b.classList.toggle("on",j===i)); document.querySelectorAll(".tab").forEach((t,j)=>t.classList.toggle("on",j===i)); scrollTo({top:0,behavior:"smooth"}); }
+function unlock(i){unlocked=Math.max(unlocked,i);navBtns.forEach((b,j)=>{b.classList.toggle("lock",j>unlocked);b.classList.toggle("done",j<unlocked)})}
+navBtns.forEach((b,i)=>b.onclick=()=>go(i));
+
+/* ===== title ===== */
+$("#startBtn").onclick=async()=>{
+  name=($("#nameIn").value.trim()||"무명"); $("#pname").textContent=name;
+  $("#title").style.display="none";
+  await cutscene([
+    {t:"2026년 11월 6일, 아침."},
+    {t:"우편함에 누런 봉투 하나가 꽂혀 있었다."},
+    {t:"소인 날짜는 — 2006년 8월 14일.",c:"red"},
+    {t:"20년 전에 부쳐진 편지.",wait:900},
+    {t:"그런데 받는 사람 칸에는, 분명히 이렇게 적혀 있었다."},
+    {pause:500},
+    {t:`"${name} 탐정님께"`,c:"red",speed:140,wait:1400},
+  ],"흑백관으로 간다",()=>{ $("#game").style.display="block"; scrollTo(0,0); lightning(); });
+};
+$("#nameIn").addEventListener("keydown",e=>{if(e.key==="Enter")$("#startBtn").click()});
+
+/* ===== STEP 1 ===== */
+const ql=$("#qlist");
+let busy=false;
+Q.forEach((it,i)=>{
+  const d=document.createElement("div"); d.className="qitem";
+  d.innerHTML=`<span class="to">▶ ${it.to}에게</span>${it.q}<div class="ans">${it.a}</div>`;
+  d.onclick=async()=>{
+    if(busy||d.classList.contains("used")||qLeft<=0) return;
+    d.classList.add("used"); qLeft--; asked++;
+    $("#qLeft").textContent=qLeft; $("#qBar").style.width=(asked/6*100)+"%";
+    if(i===8||i===11){quake();sfx.beat();}
+    if(asked===3&&!blackoutDone){blackoutDone=true;busy=true;await sleep(2200);await blackout();busy=false;}
+    if(qLeft===0) finishStep1();
+  };
+  ql.appendChild(d);
+});
+async function blackout(){
+  flick(); await sleep(400);
+  await cutscene([
+    {t:"— 정전.",c:"red",wait:1200},
+    {t:"발전기가 멈췄다. 저택 전체가 암흑에 잠겼다."},
+    {t:"복도 끝에서, 무언가가 걸어온다."},
+    {t:"사각… 사각…",speed:180,wait:800},
+    {t:"사람의 발소리가 아니다. 너무 가볍다.",wait:900},
+    {t:"발소리가 — 당신의 방문 앞에서 멈췄다.",c:"red",wait:1500},
+    {pause:900},
+    {t:"(문을 열었다. 아무도 없다. 바닥에 뭔가 놓여 있을 뿐.)",c:"small"},
+  ],"문 앞을 확인한다",()=>{
+    $("#foundNote").textContent=`그만 물어봐, ${name}.`;
+    $("#found").style.display="block"; $("#found").scrollIntoView({behavior:"smooth",block:"center"});
+    setDist(dist-5,"🎎 월희가 저택 안을 돌아다니고 있다. 거리 "+(dist-5)+"m");
+    setTimeout(()=>scare("그 만"),1600);
+  });
+}
+function finishStep1(){
+  document.querySelectorAll(".qitem:not(.used)").forEach(e=>e.classList.add("off"));
+  unlock(1); lightning(); toast("🔓 현장 증거 열람 가능. 정전 중 — 손전등을 챙기세요.");
+  const b=document.createElement("div"); b.className="center mt"; b.innerHTML=`<button class="btn">🔦 손전등을 들고 아틀리에로 →</button>`;
+  b.firstChild.onclick=()=>go(1); ql.after(b);
+}
+
+/* ===== STEP 2 flashlight ===== */
+const evs=$("#evs"),torch=$("#torch"),wrapEv=$("#evWrap");
+function moveTorch(cx,cy){const r=wrapEv.getBoundingClientRect();torch.style.setProperty("--x",(cx-r.left)+"px");torch.style.setProperty("--y",(cy-r.top)+"px")}
+wrapEv.addEventListener("pointermove",e=>moveTorch(e.clientX,e.clientY));
+wrapEv.addEventListener("pointerdown",e=>moveTorch(e.clientX,e.clientY));
+wrapEv.addEventListener("touchmove",e=>{const t=e.touches[0];moveTorch(t.clientX,t.clientY)},{passive:true});
+torch.style.setProperty("--r",innerWidth<520?"115px":"140px");
+EV.forEach((e,i)=>{
+  const b=document.createElement("button"); b.className="ev"+(e.special?" special":"");
+  b.innerHTML=`<div class="ic">${e.ic}</div><div class="t">${e.t}</div><div class="s">${e.s}</div>`;
+  b.onclick=()=>{
+    document.querySelectorAll(".ev").forEach(x=>x.classList.remove("open")); b.classList.add("open");
+    $("#evView").innerHTML=e.body();
+    if(innerWidth<520) wrapEv.scrollIntoView({behavior:"smooth",block:"start"});
+    if(!evRead.has(i)){
+      evRead.add(i); b.classList.add("read"); b.querySelector(".s").textContent="✔ 확인됨"; $("#evCnt").textContent=evRead.size;
+      e.onRead&&e.onRead();
+      if(evRead.size===EV.length) setTimeout(powerBack,4500);
+    }
+  };
+  evs.appendChild(b);
+});
+function powerBack(){
+  flick(); setTimeout(flick,500);
+  setTimeout(()=>{torch.classList.add("off");$("#torchTip").innerHTML="💡 비상 발전기가 돌아왔다.<br><b class='blood'>…불이 켜지자, 진열장의 인형들이 전부 당신 쪽으로 고개를 돌리고 있었다.</b>";},900);
+  $("#toDeduce").disabled=false; unlock(2); toast("🔓 모든 증거 확인 완료. 모순을 찾았나요?");
+}
+$("#toDeduce").onclick=()=>go(2);
+
+/* ===== STEP 3 ===== */
+const dqs=$("#dqs");
+DQ.forEach((d,qi)=>{
+  const w=document.createElement("div"); w.className="dq"; w.innerHTML=`<div class="qq">${d.q}</div><div class="opts"></div>`;
+  const os=w.querySelector(".opts");
+  d.o.forEach((t,oi)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>{os.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");picks[qi]=oi;$("#verdict").className=""};os.appendChild(b)});
+  dqs.appendChild(w);
+});
+$("#submit").onclick=async()=>{
+  if(picks.includes(null)){toast("모든 문제에 답을 선택하세요.");return}
+  const wrong=DQ.findIndex((d,i)=>picks[i]!==d.a);
+  if(wrong>=0){
+    tries++; quake(); document.body.classList.add("tilt"); setTimeout(()=>document.body.classList.remove("tilt"),1400);
+    const nd=dist-3; setDist(nd);
+    if(nd<=0){await badEnd();return;}
+    const heads=["❌ 틀렸어.","❌ 아니야. 아니야. 아니야.","❌ 탐정님, 거의 다 왔어. 나도."];
+    $("#vHead").textContent=heads[Math.min(tries-1,2)];
+    const v=$("#verdict"); v.className="bad"; $("#vMsg").innerHTML=`<b>Q${wrong+1}</b>이(가) 틀렸습니다. 월희와의 거리 <b class="blood">${nd}m</b><br>💡 ${DQ[wrong].m}`;
+    v.classList.add("shake"); setTimeout(()=>v.classList.remove("shake"),400); sfx.beat();
+    if(nd<=3) setTimeout(()=>scare("다 음 은"),900);
+    return;
+  }
+  unlock(3); lightning(); setTimeout(()=>{go(3);playReveal()},500);
+};
+$("#backEv").onclick=()=>go(1);
+async function badEnd(){
+  await scare("",900);
+  await cutscene([
+    {t:"…목덜미에 차가운 숨결이 닿았다.",wait:1000},
+    {t:"어깨 위로, 작고 딱딱한 손이 올라왔다.",wait:1000},
+    {t:"도자기처럼 매끄럽고, 얼음처럼 차가운 손가락.",wait:1000},
+    {t:`"틀린 탐정은 필요 없어, ${name}."`,c:"red",speed:90,wait:1600},
+    {t:"BAD END · 월희의 새 인형",c:"small"},
+  ],"⟲ 시간을 되돌려 다시 추리한다",()=>{setDist(6,"⏳ 시간이 되돌아갔다. 월희와의 거리 6m");$("#verdict").className="";});
+}
+
+/* ===== STEP 4 ===== */
+function SCRIPT(){return [
+ ["",`<div class="big">"범인은 — 당신입니다, 윤세라 선생님."</div>`],
+ [name+" 탐정","11시 40분의 비명. 그 소리 때문에 모두 <b>그 시각이 범행 시각</b>이라 믿었습니다. 그 순간 식당에서 카드를 치던 당신에겐 완벽한 알리바이가 생겼죠. 카드를 먼저 하자고 한 것도 당신이었고요."],
+ [name+" 탐정","하지만 그 비명은 월희의 몸속 <b>태엽 녹음기</b>에서 흘러나온 소리였습니다. 고인이 시험 삼아 녹음해 둔 자신의 비명. 당신은 타이머를 <b>23시 40분</b>에 맞췄습니다. 월희의 목을 떼어낸 건 장치를 조작하기 위해서이자, 저주처럼 보이게 하려는 연출이었죠."],
+ [name+" 탐정","실제 범행은 <b>밤 9시 반</b>. 수면제를 드린다며 혼자 아틀리에에 들어가 진정제를 주사하고 목을 졸랐습니다. 사후경직이 진행된 시신의 <b>등만 따뜻했던</b> 건 핫팩 때문이고, 가장 먼저 시신을 확인한 의사로서 '방금 돌아가셨다'고 거짓말을 했습니다."],
+ [name+" 탐정","밀실은 실 하나로 충분했습니다. 빗장 레버에 실을 감아 <b>문 아래 1.5cm 틈</b>으로 빼내고, 복도에서 당겨 빗장을 돌렸죠. 문이 부서지자 당신은 시신이 아니라 <b>빗장으로 먼저 달려가</b> 실을 회수했습니다. 집사님이 보셨어요."],
+ [name+" 탐정","그리고 찢긴 사진. <b>'■■라 언니랑'</b>. 2006년 여름 이 저택에서 사라진 열두 살 소녀, <b>윤하라</b>. 당신의 언니입니다."],
+ ["<span class='culprit'>윤세라</span>",`<span class="serif">"…언니는 그해 여름, 인형 모델을 해 주러 이 집에 갔다가 돌아오지 않았어요.<br><br>여기 와서 월희를 처음 봤을 때 알았어요. 저 얼굴. 저 머리카락. <b>저건 언니 머리카락이에요.</b> 그 여자는 언니를 죽이고, 언니를 인형 속에 넣어 20년 동안 매일 밤 빗질을 해 줬던 거예요."</span>`],
+ ["<span class='culprit'>윤세라</span>",`<span class="serif">"벽의 글씨… '아직 한 명 남았다.' 그날 언니를 묻은 건 그 여자 혼자가 아니었어요."</span>`],
+ [name+" 탐정","…하나만 더 묻겠습니다. <b>저에게 편지를 보낸 것도 당신입니까?</b>"],
+ ["<span class='culprit'>윤세라</span>",`<span class="serif">"편지요? …저는 탐정님을 <b class="blood">부른 적이 없어요.</b>"</span>`],
+]}
+function playReveal(){
+  const r=$("#reveal"); r.innerHTML="";
+  SCRIPT().forEach(([sp,tx])=>{const p=document.createElement("p");p.innerHTML=(sp?`<span class="speaker">${sp}</span>`:"")+tx;r.appendChild(p)});
+  const ps=[...r.querySelectorAll("p")];
+  ps.forEach((p,i)=>setTimeout(()=>{p.classList.add("show");p.scrollIntoView({behavior:"smooth",block:"center"});
+    if(i===0)lightning(); if(i===6){quake();sfx.beat()} if(i===9){flick();setTimeout(()=>scare(""),1600)}
+  },600+i*2700));
+  setTimeout(()=>{$("#nextBtnWrap").style.display="block";$("#nextBtnWrap").scrollIntoView({behavior:"smooth",block:"center"})},600+ps.length*2700);
+}
+$("#toCoda").onclick=async()=>{
+  sfx.box();
+  await cutscene([
+    {t:"보고서에 서명하려는 순간, 시계탑이 자정을 쳤다.",wait:900},
+    {t:"머리 없는 월희의 가슴 속에서 — 태엽이 감기는 소리가 났다.",wait:900},
+    {t:"끼릭… 끼릭… 끼릭…",speed:150,wait:900},
+    {t:"녹음기가 재생한 건 서월화의 비명이 아니었다.",wait:700},
+    {t:"어린 여자아이의 목소리였다.",wait:1000},
+    {t:`"${name} 탐정님, 와 줘서 고마워요."`,c:"red",speed:110,wait:1200},
+    {t:`"아직 한 명 남았어요."`,c:"red",speed:110,wait:1400},
+    {t:"고개를 들었을 때, 집사 한도진의 방은 비어 있었다.",wait:700},
+    {t:"지하 공방의 문이 활짝 열려 있다.",wait:900},
+  ],"🔦 지하로 내려간다",startCellar);
+};
+
+/* ===== basement exploration ===== */
+const CI=[
+ {x:20,y:26,ico:"🧳",t:"아이 크기의 트렁크.<br>안쪽에 손톱으로 긁은 글자 — <b>'엄마'</b>"},
+ {x:80,y:24,ico:"🪆",t:"목 없는 인형 몸통 열두 개.<br>모두 같은 원피스를 입고 있다."},
+ {x:22,y:76,ico:"🪑",t:"의자에 앉은 집사 한도진.<br>숨은 쉬고 있다. 눈도 뜨고 있다.<br><b>입이 실로 꿰매져 있다.</b>"},
+ {x:78,y:74,ico:"🧱",t:"새로 허물어진 벽.<br>안쪽의 작은 뼈들 위에<br>월희의 머리가 <b>얹혀 있다.</b>"},
+];
+let cellarDone=false;
+function startCellar(){
+  const C=$("#cellar"),T=$("#cellarTorch"),box=$("#citems"); C.style.display="block"; box.innerHTML="";
+  $("#cwall").textContent=`찾아줘서 고마워요 ${name}`;
+  const found=new Set();
+  CI.forEach(c=>{const d=document.createElement("div");d.className="item";d.style.left=c.x+"%";d.style.top=c.y+"%";d.innerHTML=`<span class="ico">${c.ico}</span>${c.t}`;box.appendChild(d)});
+  const mv=(x,y)=>{
+    T.style.setProperty("--x",x+"px");T.style.setProperty("--y",y+"px");
+    CI.forEach((c,i)=>{if(found.has(i))return;if(Math.hypot(c.x/100*innerWidth-x,c.y/100*innerHeight-y)<75){found.add(i);$("#cfound").textContent=found.size;if(navigator.vibrate)navigator.vibrate(60);
+      if(found.size===CI.length&&!cellarDone){cellarDone=true;setTimeout(cellarEnd,2800);}}});
+  };
+  C.onpointermove=e=>mv(e.clientX,e.clientY); C.onpointerdown=e=>mv(e.clientX,e.clientY);
+  C.ontouchmove=e=>{const t=e.touches[0];mv(t.clientX,t.clientY)};
+}
+async function cellarEnd(){
+  const E=$("#cellarEnd"); E.style.display="flex";
+  E.innerHTML=`<p class="serif" style="font-size:17px;color:#bbb">손전등이 깜빡였다. 한 번. 두 번.</p>`;
+  await sleep(1800); await scare("하 나",900);
+  E.innerHTML=`<p class="serif" style="font-size:16px;color:#aaa;line-height:2">다시 불이 들어왔을 때, 의자는 비어 있었다.<br>벽 속의 뼈도, 월희의 머리도 사라졌다.<br><br>당신의 코트 주머니가 무겁다.<br>꺼내 보니 — 누렇게 바랜 새 편지.</p>
+  <p class="hand" style="font-size:28px;margin:20px 0;color:#c22">소인: 2006년 8월 14일<br>받는 사람: ${name} 탐정님</p>
+  <p class="serif" style="color:#888;font-size:14px">"다음엔 지하 공방의 아래층으로 와 주세요."</p>
+  <p style="color:var(--gold);font-size:13px;margin-top:20px">🏅 ${name} 탐정 · ${tries===0?"오답 0회 — 상위 1% 명탐정":tries<3?`오답 ${tries}회 — 실력파 탐정`:`오답 ${tries}회 — 살아남은 견습 탐정`}</p>
+  <p class="blood" style="margin-top:10px;letter-spacing:.2em">사건파일 #1104 : 지하 공방의 아래층 — COMING SOON</p>
+  <div class="mt"><button class="btn ghost" onclick="location.reload()">처음부터 다시</button></div>`;
+}
+</script>
+</body>
+</html>
